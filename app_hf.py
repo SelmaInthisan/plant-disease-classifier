@@ -13,7 +13,7 @@ from app.disease_info import get_disease_info
 # Initialize inference service
 service = ModelInferenceService.get_instance()
 
-def predict_leaf(image: Image.Image):
+def predict_leaf(image):
     if image is None:
         return (
             "Please upload or choose a leaf image.",
@@ -24,10 +24,9 @@ def predict_leaf(image: Image.Image):
             "N/A"
         )
 
-    # Convert PIL Image to bytes
-    img_byte_arr = io.BytesIO()
-    image.save(img_byte_arr, format='JPEG')
-    img_bytes = img_byte_arr.getvalue()
+    # Read uploaded image file
+with open(image, "rb") as f:
+    img_bytes = f.read()
 
     result = service.predict(img_bytes)
 
@@ -79,7 +78,11 @@ with gr.Blocks(title="Plant Disease Classification — AI Leaf Health Diagnostic
 
     with gr.Row():
         with gr.Column(scale=1):
-            input_image = gr.Image(type="pil", label="Upload Plant Leaf Image", sources=["upload", "webcam", "clipboard"])
+           input_image = gr.Image(
+    type="filepath",
+    label="Upload Plant Leaf Image",
+    sources=["upload", "webcam", "clipboard"]
+)
             predict_btn = gr.Button("🔍 Analyze Plant Leaf", variant="primary", size="lg")
             
             if valid_examples:
@@ -117,7 +120,9 @@ with gr.Blocks(title="Plant Disease Classification — AI Leaf Health Diagnostic
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 7860))
     demo.launch(
-        server_name="0.0.0.0",
-        server_port=port,
-        share=False
-    )
+    server_name="0.0.0.0",
+    server_port=port,
+    share=False,
+    show_error=True,
+    max_file_size="10mb"
+)

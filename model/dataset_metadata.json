@@ -1,0 +1,25 @@
+{
+  "dataset": "mohanty/PlantVillage",
+  "configuration": "color",
+  "official_test_split_used": true,
+  "validation_source": "official color_train.txt only",
+  "validation_split": 0.15,
+  "leaf_id_safe_split": true,
+  "seed": 42,
+  "classes": {
+    "Diseased": 0,
+    "Healthy": 1
+  },
+  "train_counts": {
+    "Healthy": 500,
+    "Diseased": 500
+  },
+  "val_counts": {
+    "Healthy": 500,
+    "Diseased": 500
+  },
+  "test_counts": {
+    "Healthy": 500,
+    "Diseased": 500
+  }
+}

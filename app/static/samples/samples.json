@@ -1,0 +1,50 @@
+[
+  {
+    "class_name": "Healthy",
+    "sub_category": "Tomato Healthy",
+    "crop": "Tomato",
+    "filename": "sample_tomato_healthy.jpg",
+    "url": "/static/samples/sample_tomato_healthy.jpg",
+    "category": "Tomato___healthy"
+  },
+  {
+    "class_name": "Healthy",
+    "sub_category": "Potato Healthy",
+    "crop": "Potato",
+    "filename": "sample_potato_healthy.jpg",
+    "url": "/static/samples/sample_potato_healthy.jpg",
+    "category": "Potato___healthy"
+  },
+  {
+    "class_name": "Healthy",
+    "sub_category": "Pepper Healthy",
+    "crop": "Pepper",
+    "filename": "sample_pepper_healthy.jpg",
+    "url": "/static/samples/sample_pepper_healthy.jpg",
+    "category": "Pepper__bell___healthy"
+  },
+  {
+    "class_name": "Diseased",
+    "sub_category": "Tomato Early Blight",
+    "crop": "Tomato",
+    "filename": "sample_tomato_early_blight.jpg",
+    "url": "/static/samples/sample_tomato_early_blight.jpg",
+    "category": "Tomato___Early_blight"
+  },
+  {
+    "class_name": "Diseased",
+    "sub_category": "Tomato Late Blight",
+    "crop": "Tomato",
+    "filename": "sample_tomato_late_blight.jpg",
+    "url": "/static/samples/sample_tomato_late_blight.jpg",
+    "category": "Tomato___Late_blight"
+  },
+  {
+    "class_name": "Diseased",
+    "sub_category": "Potato Early Blight",
+    "crop": "Potato",
+    "filename": "sample_potato_early_blight.jpg",
+    "url": "/static/samples/sample_potato_early_blight.jpg",
+    "category": "Potato___Early_blight"
+  }
+]

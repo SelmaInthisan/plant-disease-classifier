@@ -77,10 +77,10 @@ class ModelInferenceService:
         print("Loading MobileNetV2 checkpoint...", flush=True)
 
         checkpoint = torch.load(
-            self.model_path,
-            map_location="cpu",
-            weights_only=False
-        )
+    self.model_path,
+    map_location="cpu",
+    weights_only=True
+)      
 
         # --------------------------------------------------
         # Load class mapping

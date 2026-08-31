@@ -97,7 +97,9 @@ def predict_leaf(image):
 
     # Run model prediction.
     try:
-        result = service.predict(img_bytes)
+       result = service.predict(img_bytes)
+
+       print("PREDICTION RESULT:", result, flush=True)
     except Exception as e:
         return (
             f"Prediction Error: {str(e)}",

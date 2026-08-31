@@ -17,9 +17,6 @@ service = ModelInferenceService.get_instance()
 def looks_like_leaf(image_path):
     """
     Conservative check for obviously non-leaf images.
-
-    This is only an input filter. It does not modify or retrain
-    the MobileNetV2 classification model.
     """
     try:
         image = Image.open(image_path).convert("RGB")
@@ -32,7 +29,6 @@ def looks_like_leaf(image_path):
 
         total = len(pixels)
 
-        # Estimate plant/green pixel proportion.
         green_pixels = sum(
             1
             for r, g, b in pixels
@@ -43,14 +39,9 @@ def looks_like_leaf(image_path):
 
         green_ratio = green_pixels / total
 
-        # Conservative threshold.
-        # Many real leaves contain green, while obvious unrelated
-        # images generally contain very little green.
         return green_ratio >= 0.08
 
     except Exception:
-        # If validation cannot be performed, allow the image to
-        # proceed to the classifier rather than blocking valid images.
         return True
 
 
@@ -69,6 +60,16 @@ def predict_leaf(image):
             "N/A"
         )
 
+    if not os.path.exists(image):
+        return (
+            "UPLOAD ERROR",
+            {},
+            "Image file not found",
+            "The uploaded image could not be accessed by the server.",
+            "Please upload the image again.",
+            "The server could not access the uploaded file."
+        )
+
     # Reject obviously unrelated images.
     if not looks_like_leaf(image):
         return (
@@ -80,7 +81,7 @@ def predict_leaf(image):
             "The system accepts plant leaf photographs for Healthy vs Diseased classification."
         )
 
-    # Read uploaded image file.
+    # Read uploaded image.
     try:
         with open(image, "rb") as f:
             img_bytes = f.read()
@@ -107,7 +108,6 @@ def predict_leaf(image):
             "Please check the application logs for more information."
         )
 
-    # Health status.
     is_healthy = result["is_healthy"]
 
     if is_healthy:
@@ -119,17 +119,14 @@ def predict_leaf(image):
             f"DISEASED ({result['confidence_percentage']})"
         )
 
-    # Class probabilities.
     confidence_dict = result["class_probabilities"]
 
-    # Diagnostic summary.
     primary_diagnosis = (
         f"**Prediction:** {result['prediction']} "
         f"({result['confidence_percentage']} Confidence)\n\n"
         f"**Latency:** {result['inference_time_ms']} ms"
     )
 
-    # Observable symptoms.
     symptoms = result.get("symptoms", [])
 
     if symptoms:
@@ -139,7 +136,6 @@ def predict_leaf(image):
     else:
         symptoms_text = "No specific symptoms reported."
 
-    # Prevention.
     prevention = result.get("prevention", [])
 
     if prevention:
@@ -147,11 +143,8 @@ def predict_leaf(image):
             f"• {p}" for p in prevention
         )
     else:
-        prevention_text = (
-            "No specific prevention information available."
-        )
+        prevention_text = "No specific prevention information available."
 
-    # Advisory information.
     advisory_text = (
         f"**Pathogen Category:** "
         f"{result.get('pathogen_type', 'N/A')}\n\n"
@@ -173,12 +166,14 @@ def predict_leaf(image):
         symptoms_text,
         prevention_text,
         advisory_text
-    )# Six verified quick-test samples.
+    )
+
+
+# Quick-test samples
 sample_examples = [
     ["app/static/samples/sample_tomato_healthy.jpg"],
     ["app/static/samples/sample_potato_healthy.jpg"],
     ["app/static/samples/sample_pepper_healthy.jpg"],
-    
     ["app/static/samples/sample_potato_early_blight.jpg"]
 ]
 
@@ -189,6 +184,7 @@ valid_examples = [
 ]
 
 
+# Gradio interface
 with gr.Blocks(
     title="Plant Disease Classification — AI Leaf Health Diagnostics"
 ) as demo:
@@ -212,11 +208,7 @@ with gr.Blocks(
             input_image = gr.Image(
                 type="filepath",
                 label="Upload Plant Leaf Image",
-                sources=[
-                    "upload",
-                    "webcam",
-                    "clipboard"
-                ]
+                sources=["upload"]
             )
 
             predict_btn = gr.Button(
@@ -274,7 +266,7 @@ with gr.Blocks(
 
     predict_btn.click(
         fn=predict_leaf,
-        inputs=[input_image],
+        inputs=input_image,
         outputs=[
             health_output,
             conf_output,
@@ -287,6 +279,7 @@ with gr.Blocks(
 
 
 if __name__ == "__main__":
+
     port = int(os.environ.get("PORT", "7860"))
 
     demo.launch(

@@ -190,8 +190,7 @@ valid_examples = [
 
 
 with gr.Blocks(
-    title="Plant Disease Classification — AI Leaf Health Diagnostics",
-    theme=gr.themes.Soft(primary_hue="emerald")
+    title="Plant Disease Classification — AI Leaf Health Diagnostics"
 ) as demo:
 
     gr.Markdown(
@@ -296,9 +295,10 @@ if __name__ == "__main__":
     )
 
     demo.launch(
-        server_name="0.0.0.0",
-        server_port=port,
-        share=False,
-        show_error=True,
-        max_file_size="10mb"
-    )
+    server_name="0.0.0.0",
+    server_port=port,
+    share=False,
+    show_error=True,
+    max_file_size="10mb",
+    theme=gr.themes.Soft(primary_hue="emerald")
+)

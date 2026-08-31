@@ -11,7 +11,16 @@ from app.model_loader import ModelInferenceService
 
 
 # Initialize inference service
-service = ModelInferenceService.get_instance()
+service = None
+
+
+def get_service():
+    global service
+
+    if service is None:
+        service = ModelInferenceService.get_instance()
+
+    return service
 
 
 def looks_like_leaf(image_path):
@@ -97,7 +106,7 @@ def predict_leaf(image):
 
     # Run model prediction.
     try:
-       result = service.predict(img_bytes)
+       result = get_service().predict(img_bytes)
 
        print("PREDICTION RESULT:", result, flush=True)
     except Exception as e:
